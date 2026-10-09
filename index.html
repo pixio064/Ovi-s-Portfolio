@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f2">
+  <meta name="description" content="Ovi ,  Electrical and Electronic Engineering student at CUET. Projects in power systems, electronics, embedded systems and software.">
+  <title>Ovi ,  EEE Student & Engineering Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f7f7f2;
+      --surface: #ffffff;
+      --ink: #202820;
+      --muted: #667066;
+      --line: #dfe4db;
+      --green: #285c43;
+      --green-dark: #1d4432;
+      --soft-green: #e8efe8;
+      --yellow: #e8c96b;
+      --max: 1080px;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    .mono, .eyebrow, .project-number, .nav-label, .meta {
+      font-family: "DM Sans", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      font-size: .72rem;
+    }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(247,247,242,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { text-decoration: none; font-family: Manrope, sans-serif; font-weight: 800; letter-spacing: -.06em; font-size: 1.35rem; }
+    .brand span { color: var(--green); }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: .88rem; text-decoration: none; color: var(--muted); }
+    .nav-links a:hover { color: var(--green); }
+    .nav-toggle { display: none; border: 0; border-bottom: 1px solid var(--ink); background: transparent; border-radius: 0; padding: 7px 0; color: var(--ink); }
+    .hero { padding: 86px 0 76px; border-bottom: 1px solid var(--line); }
+    .hero-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 54px; align-items: center; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--green); }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--green); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin: 20px 0; max-width: 700px; font: 800 clamp(2.7rem, 6vw, 5.1rem)/1.04 Manrope, sans-serif; letter-spacing: -.075em; }
+    h1 em { font-style: normal; color: var(--green); }
+    .intro { max-width: 590px; color: var(--muted); font-size: 1.08rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 17px; border: 1px solid var(--green); border-radius: 4px; background: var(--green); color: white; text-decoration: none; font-weight: 700; font-size: .9rem; transition: background .18s, transform .18s; }
+    .button:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .button.secondary { background: transparent; color: var(--green); }
+    .button.secondary:hover { background: var(--soft-green); }
+    .hero-note { border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; padding: 24px 0 0; }
+    .hero-note .mono { color: var(--muted); }
+    .hero-note h2 { font: 700 1.2rem/1.3 Manrope, sans-serif; margin: 12px 0 18px; letter-spacing: -.03em; }
+    .focus-list { list-style: none; margin: 0; padding: 0; }
+    .focus-list li { display: flex; gap: 12px; align-items: baseline; padding: 11px 0; border-top: 1px solid var(--line); font-size: .94rem; }
+    .focus-list li::before { content: "↗"; color: var(--green); font-family: "DM Sans", sans-serif; }
+    section { padding: 76px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: 180px 1fr; gap: 28px; margin-bottom: 32px; }
+    .section-head .eyebrow { margin-top: 9px; }
+    h2.section-title { margin-bottom: 0; font: 800 clamp(1.9rem, 4vw, 3rem)/1.12 Manrope, sans-serif; letter-spacing: -.06em; }
+    .section-desc { color: var(--muted); max-width: 670px; margin: 12px 0 0; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 42px; }
+    .about-copy p { max-width: 600px; color: var(--muted); }
+    .facts { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .facts li { display: grid; grid-template-columns: 125px 1fr; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+    .facts strong { font-weight: 600; }
+    .facts span { color: var(--muted); }
+    .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .project { padding: 22px 22px 24px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; display: flex; flex-direction: column; min-height: 285px; }
+    .project-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .project-number { color: var(--muted); }
+    .status { display: inline-flex; border-radius: 99px; padding: 4px 9px; background: var(--soft-green); color: var(--green); font-size: .72rem; font-weight: 700; }
+    .status.plan { background: #f4eedc; color: #725b1b; }
+    .project h3 { font: 700 1.25rem/1.3 Manrope, sans-serif; letter-spacing: -.035em; margin-bottom: 9px; }
+    .project p { color: var(--muted); font-size: .94rem; margin-bottom: 18px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 8px; }
+    .tag { color: var(--muted); font-size: .8rem; }
+    .tag + .tag::before { content: "·"; margin: 0 8px 0 1px; color: #a0a69d; }
+    .project-links { display: flex; gap: 16px; margin-top: 20px; }
+    .project-links a { color: var(--green); font-weight: 700; font-size: .86rem; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+    .skill { padding: 8px 4px 8px 0; background: transparent; }
+    .skill h3 { font: 700 1rem Manrope, sans-serif; margin-bottom: 12px; }
+    .skill p { color: var(--muted); font-size: .9rem; margin: 0; }
+    .timeline { border-top: 1px solid var(--line); }
+    .timeline-item { display: grid; grid-template-columns: 180px 1fr; gap: 28px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+    .timeline-item .meta { color: var(--muted); padding-top: 5px; }
+    .timeline-item h3 { margin-bottom: 6px; font: 700 1.08rem Manrope, sans-serif; }
+    .timeline-item p { color: var(--muted); margin-bottom: 0; max-width: 720px; }
+    .contact { padding: 82px 0; }
+    .contact-box { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; }
+    .contact-box h2 { max-width: 650px; font: 800 clamp(2.3rem, 5vw, 4rem)/1.05 Manrope, sans-serif; letter-spacing: -.07em; margin: 14px 0; }
+    .contact-box p { color: var(--muted); max-width: 560px; margin-bottom: 0; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    footer { padding: 22px 0; color: var(--muted); font-size: .82rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .back-top { text-decoration: none; color: var(--green); }
+    @media (max-width: 760px) {
+      .wrap { width: min(var(--max), calc(100% - 30px)); }
+      .nav { min-height: 62px; }
+      .nav-toggle { display: inline-flex; }
+      .nav-links { display: none; position: absolute; top: 61px; left: 0; right: 0; padding: 14px 20px 18px; background: var(--paper); border-bottom: 1px solid var(--line); flex-direction: column; align-items: flex-start; gap: 14px; }
+      .nav-links.open { display: flex; }
+      .hero { padding: 58px 0; }
+      .hero-grid, .about-grid, .contact-box { grid-template-columns: 1fr; }
+      .hero-grid { gap: 30px; }
+      .section-head { grid-template-columns: 1fr; gap: 10px; }
+      section { padding: 58px 0; }
+      .project-grid, .skill-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+      .contact-box { align-items: start; }
+      h1 { font-size: clamp(2.6rem, 13vw, 4.3rem); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="Ovi home">ovi<span>.</span></a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">EEE student · CUET · Bangladesh</div>
+          <h1>Curious about how things work.<br><em>Driven to build.</em></h1>
+          <p class="intro">I'm Ovi, an Electrical and Electronic Engineering student at CUET. I explore the space between electrical systems, electronics, embedded technology and software, learning by analysing problems and building practical projects.</p>
+          <div class="actions">
+            <a class="button" href="#projects">Explore my work <span aria-hidden="true">&nbsp;↘</span></a>
+            <a class="button secondary" href="#contact">Get in touch</a>
+          </div>
+        </div>
+        <aside class="hero-note" aria-label="Areas of interest">
+          <div class="eyebrow">Current interests / 01, 04</div>
+          <h2>Engineering is where theory meets a working system.</h2>
+          <ul class="focus-list">
+            <li>Power systems & energy</li>
+            <li>Electronics & circuit design</li>
+            <li>Embedded systems & IoT</li>
+            <li>Python, data & machine learning</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">01 / About</div>
+          <div><h2 class="section-title">A little about me.</h2>
+          <p class="section-desc">I enjoy understanding why a circuit or system behaves the way it does, then using that understanding in a simulation, prototype or software tool.</p></div>
+        </div>
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>My studies in EEE have introduced me to circuits, electrical machines, signals and systems, and power engineering. Alongside coursework, I practise programming and explore projects that connect engineering with computing.</p>
+            <p>I value clear documentation, honest results and learning through iteration. I'm interested in opportunities where I can contribute, ask better questions and grow through hands-on work.</p>
+          </div>
+          <ul class="facts">
+            <li><strong>University</strong><span>Chittagong University of Engineering and Technology (CUET)</span></li>
+            <li><strong>Department</strong><span>Electrical and Electronic Engineering</span></li>
+            <li><strong>Based in</strong><span>Chattogram, Bangladesh</span></li>
+            <li><strong>Community</strong><span>IEEE CUET Student Branch</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">02 / Selected work</div>
+          <div><h2 class="section-title">Projects, experiments & ideas.</h2>
+          <p class="section-desc">A selection of engineering and software work. Project descriptions should reflect the actual implementation; planned features are labelled as concepts rather than completed results.</p></div>
+        </div>
+        <div class="project-grid">
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 01</span><span class="status">In development</span></div>
+            <h3>GridGuard ,  Grid Monitoring Concept</h3>
+            <p>A concept for presenting distribution-grid data in a dashboard, with room for live measurements, fault insights and a geographic view. The final scope depends on implemented and tested features.</p>
+            <div class="tags"><span class="tag">Power systems</span><span class="tag">Web dashboard</span><span class="tag">IoT concept</span></div>
+            <div class="project-links"><a href="https://github.com/pixio064" target="_blank" rel="noreferrer">GitHub profile ↗</a></div>
+          </article>
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 02</span><span class="status plan">Prototype idea</span></div>
+            <h3>Solar Panel I–V Curve Tracer</h3>
+            <p>An embedded-systems concept using a controlled load, voltage and current sensing, and an ESP32 to study a solar panel's I–V and P–V characteristics.</p>
+            <div class="tags"><span class="tag">ESP32</span><span class="tag">Sensors</span><span class="tag">Renewable energy</span></div>
+          </article>
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 03</span><span class="status">ML project</span></div>
+            <h3>Diabetes Prediction Web App</h3>
+            <p>A machine-learning web app exploring model comparison and explainability, using XGBoost, Random Forest, Gradient Boosting, cross-validation, SMOTE and SHAP.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Machine learning</span></div>
+            <div class="project-links"><a href="https://github.com/pixio064" target="_blank" rel="noreferrer">GitHub profile ↗</a></div>
+          </article>
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 04</span><span class="status">MATLAB study</span></div>
+            <h3>Three-Phase Distribution Transformer Design</h3>
+            <p>A MATLAB-based design study for an 80 kVA, 11 kV/433 V, 50 Hz delta/star transformer, covering core sizing, winding estimates, losses and impedance calculations.</p>
+            <div class="tags"><span class="tag">MATLAB</span><span class="tag">Electrical machines</span><span class="tag">Design calculations</span></div>
+          </article>
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 05</span><span class="status plan">Research / development</span></div>
+            <h3>Baagh Chal AI</h3>
+            <p>An exploration of search algorithms for the traditional Baagh Chal board game. Add the specific algorithm, evaluation method and paper/code links here when they are ready to share.</p>
+            <div class="tags"><span class="tag">AI</span><span class="tag">Game search</span><span class="tag">Python</span></div>
+          </article>
+          <article class="project">
+            <div class="project-top"><span class="project-number">PROJECT / 06</span><span class="status plan">Concept study</span></div>
+            <h3>Virtual Power Plant & Community Energy</h3>
+            <p>An idea exploring how distributed energy resources and solar forecasting could support a local community-energy model. Implementation details and findings will be added as the work progresses.</p>
+            <div class="tags"><span class="tag">Smart grids</span><span class="tag">Solar forecasting</span><span class="tag">Energy systems</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">03 / Toolkit</div>
+          <div><h2 class="section-title">Tools I work with.</h2>
+          <p class="section-desc">A practical snapshot of my current toolkit. This list should grow with demonstrated experience, not just tools I've heard of.</p></div>
+        </div>
+        <div class="skill-grid">
+          <article class="skill"><h3>Programming & analysis</h3><p>Python · MATLAB · JavaScript · HTML/CSS · Matplotlib</p></article>
+          <article class="skill"><h3>Electrical engineering</h3><p>Circuit analysis · Op-amp circuits · Transformers · Signals & systems · Control systems</p></article>
+          <article class="skill"><h3>Embedded & data</h3><p>ESP32 · Sensors · Firebase · scikit-learn · XGBoost · SHAP</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">04 / Exposure</div>
+          <div><h2 class="section-title">Learning beyond the classroom.</h2>
+          <p class="section-desc">Industrial visits and practical exposure help connect engineering theory to real operations.</p></div>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="meta">Industrial attachment</div>
+            <div><h3>Baraka Shikalbaha Power Limited (BSPL)</h3><p>Industrial attachment at a 105 MW heavy-fuel-oil-based power plant, providing exposure to real power-generation operations and the connection between classroom concepts and plant practice.</p></div>
+          </article>
+          <article class="timeline-item">
+            <div class="meta">Industrial visit</div>
+            <div><h3>Transcom Beverages Limited, Chattogram</h3><p>A CUET Career Club-organized visit to observe industrial production processes and learn how engineering systems support operations.</p></div>
+          </article>
+          <article class="timeline-item">
+            <div class="meta">Student activities</div>
+            <div><h3>IEEE CUET Student Branch</h3><p>Involved in student-branch activities and event communication. Add your exact position, responsibilities and measurable contributions here when confirmed.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="wrap contact-box">
+        <div>
+          <div class="eyebrow">05 / Contact</div>
+          <h2>Have a project or opportunity in mind?</h2>
+          <p>I'm open to connecting about engineering projects, internships, research and collaborative learning.</p>
+        </div>
+        <div class="contact-links">
+          <!-- Replace the example email and profile URLs with your real public links. -->
+          <a class="button" href="mailto:YOUR_EMAIL@example.com">Email me ↗</a>
+          <a class="button secondary" href="https://github.com/pixio064" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a class="button secondary" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="year"></span> Ovi · Electrical & Electronic Engineering, CUET</span>
+      <a class="back-top" href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const navToggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    navToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
