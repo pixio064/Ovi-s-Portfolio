@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ovi | EEE Student, CUET</title>
+<meta name="description" content="Portfolio of Ovi, Electrical and Electronic Engineering student at CUET.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   THEME  (change colors here and the whole site updates)
+   ===================================================================== */
+:root {
+  --bg: #060912;
+  --bg2: #0b1020;
+  --text: #e8eefc;
+  --muted: #93a0bd;
+  --a1: #22d3ee;   /* cyan   */
+  --a2: #8b5cf6;   /* violet */
+  --a3: #f472b6;   /* pink   */
+  --glass: rgba(255,255,255,.045);
+  --glass-strong: rgba(255,255,255,.08);
+  --border: rgba(255,255,255,.10);
+  --shadow: 0 20px 60px rgba(0,0,0,.45);
+  --grid-line: rgba(255,255,255,.045);
+  --blob-opacity: .55;
+}
+[data-theme="light"] {
+  --bg: #f4f6ff;
+  --bg2: #eaeeff;
+  --text: #0f1530;
+  --muted: #55607f;
+  --a1: #0891b2;
+  --a2: #6d28d9;
+  --a3: #db2777;
+  --glass: rgba(255,255,255,.70);
+  --glass-strong: rgba(255,255,255,.9);
+  --border: rgba(20,30,80,.10);
+  --shadow: 0 20px 50px rgba(40,50,120,.14);
+  --grid-line: rgba(20,30,80,.06);
+  --blob-opacity: .35;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  transition: background .4s, color .4s;
+}
+h1, h2, h3, .logo { font-family: "Space Grotesk", "Segoe UI", sans-serif; }
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+section { padding: 100px 0; position: relative; }
+
+.grad-text {
+  background: linear-gradient(90deg, var(--a1), var(--a2) 55%, var(--a3));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  background-size: 200% auto; animation: shine 6s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+/* =====================================================================
+   BACKGROUND LAYERS
+   ===================================================================== */
+.bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(90px); opacity: var(--blob-opacity);
+  animation: float 22s ease-in-out infinite;
+}
+.blob.b1 { width: 560px; height: 560px; background: var(--a2); top: -160px; left: -120px; }
+.blob.b2 { width: 500px; height: 500px; background: var(--a1); bottom: -180px; right: -100px; animation-delay: -7s; }
+.blob.b3 { width: 380px; height: 380px; background: var(--a3); top: 40%; left: 55%; opacity: calc(var(--blob-opacity) * .6); animation-delay: -13s; }
+@keyframes float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(70px,50px) scale(1.12); }
+  66% { transform: translate(-50px,80px) scale(.94); }
+}
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+          mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+}
+#net { position: absolute; inset: 0; width: 100%; height: 100%; }
+.noise {
+  position: absolute; inset: 0; opacity: .035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+#cursorGlow {
+  position: fixed; width: 460px; height: 460px; border-radius: 50%; z-index: 1; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--a1) 22%, transparent), transparent 65%);
+  transform: translate(-50%, -50%); left: -500px; top: -500px; transition: opacity .3s;
+}
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 100;
+  background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));
+  box-shadow: 0 0 12px var(--a1);
+}
+
+/* =====================================================================
+   NAVBAR (floating glass pill)
+   ===================================================================== */
+header { position: fixed; top: 14px; left: 0; right: 0; z-index: 90; }
+nav {
+  max-width: 1020px; margin: 0 auto; padding: 8px 12px 8px 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--glass); border: 1px solid var(--border); border-radius: 999px;
+  backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: var(--shadow);
+}
+.logo { font-weight: 700; letter-spacing: .06em; font-size: 1.05rem; }
+.logo span { color: var(--a1); }
+.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+.nav-links a {
+  display: block; padding: 7px 14px; border-radius: 999px; font-size: .88rem; color: var(--muted);
+  transition: .25s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--glass-strong); }
+.icon-btn {
+  background: var(--glass-strong); border: 1px solid var(--border); color: var(--text);
+  border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1rem; transition: .25s;
+}
+.icon-btn:hover { transform: rotate(20deg) scale(1.08); border-color: var(--a1); }
+.menu-btn { display: none; }
+
+/* Music button with animated equalizer bars */
+.music-btn { display: inline-flex; align-items: center; justify-content: center; }
+.music-btn:hover { transform: scale(1.08); }
+.eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+.eq i { width: 3px; height: 4px; background: var(--a1); border-radius: 2px; }
+.music-btn.playing { border-color: var(--a1); box-shadow: 0 0 14px color-mix(in srgb, var(--a1) 45%, transparent); }
+.music-btn.playing .eq i { animation: eq 1s ease-in-out infinite; }
+.music-btn.playing .eq i:nth-child(2) { animation-delay: -.3s; }
+.music-btn.playing .eq i:nth-child(3) { animation-delay: -.6s; }
+@keyframes eq { 0%,100% { height: 4px; } 50% { height: 14px; } }
+
+/* =====================================================================
+   HERO
+   ===================================================================== */
+.hero { min-height: 100vh; display: flex; align-items: center; padding: 130px 0 80px; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; }
+.badge {
+  display: inline-flex; align-items: center; gap: 9px; padding: 6px 16px; font-size: .8rem;
+  font-family: "JetBrains Mono", monospace; letter-spacing: .05em; color: var(--muted);
+  background: var(--glass); border: 1px solid var(--border); border-radius: 999px;
+}
+.badge i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e; animation: pulse 1.8s infinite; }
+@keyframes pulse { 50% { opacity: .35; transform: scale(.8); } }
+.hero h1 { font-size: clamp(2.5rem, 6.4vw, 4.6rem); line-height: 1.06; margin: 22px 0 16px; letter-spacing: -.02em; }
+.typing { font-family: "JetBrains Mono", monospace; font-size: clamp(1rem, 2.2vw, 1.3rem); color: var(--a1); min-height: 2em; }
+.caret { display: inline-block; width: 2px; height: 1.1em; background: var(--a1); margin-left: 3px; vertical-align: middle; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero p.sub { color: var(--muted); max-width: 540px; margin-top: 8px; font-size: 1.05rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.btn {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px;
+  border-radius: 12px; font-weight: 600; font-size: .95rem; border: 1px solid var(--border);
+  background: var(--glass); backdrop-filter: blur(10px); transition: transform .25s, box-shadow .25s;
+}
+.btn:hover { transform: translateY(-3px); }
+.btn.primary {
+  border: none; color: #fff; background: linear-gradient(120deg, var(--a2), var(--a1));
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--a2) 45%, transparent);
+}
+.btn.primary:hover { box-shadow: 0 14px 40px color-mix(in srgb, var(--a1) 55%, transparent); }
+.socials { display: flex; gap: 10px; margin-top: 30px; }
+.socials a {
+  padding: 6px 14px; font-size: .8rem; border: 1px solid var(--border); border-radius: 999px;
+  color: var(--muted); background: var(--glass); transition: .25s;
+}
+.socials a:hover { color: var(--text); border-color: var(--a1); }
+
+/* Oscilloscope card */
+.scope-wrap { position: relative; }
+.scope {
+  position: relative; border-radius: 22px; padding: 14px; background: var(--glass);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  transform: perspective(900px) rotateY(-8deg) rotateX(3deg); transition: transform .5s;
+}
+.scope:hover { transform: perspective(900px) rotateY(0) rotateX(0); }
+.scope-bar { display: flex; align-items: center; gap: 7px; padding: 4px 6px 12px; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--muted); }
+.scope-bar i { width: 10px; height: 10px; border-radius: 50%; }
+.scope-bar i:nth-child(1) { background: #ff5f57; } .scope-bar i:nth-child(2) { background: #febc2e; } .scope-bar i:nth-child(3) { background: #28c840; }
+.scope-bar span { margin-left: auto; }
+#scope { width: 100%; height: 250px; display: block; border-radius: 14px; background: #04070f; }
+.scope-foot { display: flex; justify-content: space-between; padding: 12px 6px 2px; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--muted); }
+.chip {
+  position: absolute; padding: 8px 14px; font-size: .78rem; font-family: "JetBrains Mono", monospace;
+  background: var(--glass-strong); border: 1px solid var(--border); border-radius: 12px;
+  backdrop-filter: blur(10px); box-shadow: var(--shadow); animation: bob 6s ease-in-out infinite;
+}
+.chip.c1 { top: -18px; right: 20px; color: var(--a1); }
+.chip.c2 { bottom: 30px; left: -26px; color: var(--a3); animation-delay: -2s; }
+.chip.c3 { bottom: -18px; right: 40px; color: var(--a2); animation-delay: -4s; }
+@keyframes bob { 50% { transform: translateY(-10px); } }
+
+.scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-size: .72rem; color: var(--muted); font-family: "JetBrains Mono", monospace; text-align: center; letter-spacing: .15em; }
+.scroll-hint::after { content: ""; display: block; width: 1px; height: 36px; margin: 8px auto 0; background: linear-gradient(var(--a1), transparent); animation: drop 2s infinite; }
+@keyframes drop { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* =====================================================================
+   SECTION HEADINGS + STATS
+   ===================================================================== */
+.eyebrow { font-family: "JetBrains Mono", monospace; font-size: .8rem; letter-spacing: .12em; color: var(--a1); }
+h2.title { font-size: clamp(1.9rem, 4vw, 2.7rem); margin: 8px 0 12px; letter-spacing: -.01em; }
+.lead { color: var(--muted); max-width: 640px; margin-bottom: 44px; }
+
+.stats { padding: 0 0 20px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat {
+  text-align: center; padding: 26px 12px; background: var(--glass); border: 1px solid var(--border);
+  border-radius: 18px; backdrop-filter: blur(12px);
+}
+.stat b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 2.3rem; line-height: 1.1; }
+.stat span { color: var(--muted); font-size: .82rem; }
+
+/* =====================================================================
+   GLASS CARD (spotlight follows the mouse)
+   ===================================================================== */
+.glass {
+  position: relative; background: var(--glass); border: 1px solid var(--border); border-radius: 20px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.glass::before {
+  content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .3s; pointer-events: none;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--a1) 20%, transparent), transparent 60%);
+}
+.glass:hover::before { opacity: 1; }
+
+/* ABOUT */
+.about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+.about-text { padding: 34px; }
+.about-text p + p { margin-top: 16px; }
+.about-text p { color: var(--muted); }
+.about-text b { color: var(--text); }
+.facts { padding: 26px 28px; list-style: none; }
+.facts li { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: .92rem; }
+.facts li:last-child { border: none; }
+.facts b { display: block; font-size: .7rem; color: var(--a1); font-family: "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; }
+
+/* PROJECTS */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+.filter {
+  padding: 8px 18px; font-size: .85rem; border-radius: 999px; cursor: pointer; color: var(--muted);
+  background: var(--glass); border: 1px solid var(--border); transition: .25s; font-family: inherit;
+}
+.filter:hover { color: var(--text); }
+.filter.active { color: #fff; border-color: transparent; background: linear-gradient(120deg, var(--a2), var(--a1)); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 24px; }
+.card { padding: 28px; display: flex; flex-direction: column; transition: transform .15s ease-out, opacity .4s, border-color .3s; transform-style: preserve-3d; }
+.card:hover { border-color: color-mix(in srgb, var(--a1) 55%, transparent); }
+.card.hide { display: none; }
+.card .top { display: flex; align-items: center; justify-content: space-between; }
+.card .num { font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--muted); }
+.status {
+  font-size: .68rem; font-weight: 600; letter-spacing: .06em; padding: 4px 11px; border-radius: 999px;
+  color: var(--a3); border: 1px solid color-mix(in srgb, var(--a3) 45%, transparent);
+  background: color-mix(in srgb, var(--a3) 10%, transparent);
+}
+.card h3 { font-size: 1.3rem; margin: 18px 0 4px; line-height: 1.3; }
+.card .meta { font-family: "JetBrains Mono", monospace; font-size: .74rem; color: var(--a1); margin-bottom: 14px; }
+.card p { color: var(--muted); font-size: .93rem; margin-bottom: 14px; }
+.card ul { margin: 0 0 18px 18px; color: var(--muted); font-size: .88rem; }
+.card ul li::marker { color: var(--a2); }
+.card .links { margin-top: auto; display: flex; gap: 18px; font-size: .86rem; font-weight: 600; }
+.card .links a { color: var(--a1); position: relative; }
+.card .links a::after { content: "↗"; margin-left: 4px; display: inline-block; transition: transform .2s; }
+.card .links a:hover::after { transform: translate(3px,-3px); }
+
+/* SKILLS */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+.skill-box { padding: 26px; }
+.skill-box h3 { font-size: 1.05rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.skill-box h3 em { font-style: normal; font-size: 1.3rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  font-size: .78rem; padding: 5px 13px; border-radius: 999px; color: var(--muted);
+  border: 1px solid var(--border); background: var(--glass); transition: .25s;
+}
+.tag:hover { color: var(--text); border-color: var(--a1); transform: translateY(-2px); }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 34px; }
+.timeline::before {
+  content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px;
+  background: linear-gradient(var(--a1), var(--a2), var(--a3)); opacity: .6; border-radius: 2px;
+}
+.t-item { position: relative; margin-bottom: 24px; padding: 24px 28px; }
+.t-item::after {
+  content: ""; position: absolute; left: -34px; top: 30px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--a1); box-shadow: 0 0 14px var(--a1);
+}
+.t-item .when { font-family: "JetBrains Mono", monospace; font-size: .76rem; color: var(--a1); }
+.t-item h3 { font-size: 1.12rem; margin: 4px 0 6px; }
+.t-item p { color: var(--muted); font-size: .92rem; }
+
+/* CONTACT */
+.contact-box { text-align: center; padding: 70px 30px; }
+.contact-box h2 { font-size: clamp(1.9rem, 5vw, 3.1rem); margin: 10px 0 14px; line-height: 1.15; }
+.contact-box .lead { margin: 0 auto 32px; }
+.contact-box .btn-row { justify-content: center; }
+footer { text-align: center; padding: 34px 0 40px; color: var(--muted); font-size: .84rem; position: relative; z-index: 2; }
+
+/* =====================================================================
+   REVEAL ON SCROLL
+   ===================================================================== */
+.reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.show { opacity: 1; transform: none; }
+.d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; }
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width: 900px) {
+  .hero-grid, .about-grid { grid-template-columns: 1fr; }
+  .scope { transform: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .chip.c2 { left: 6px; }
+}
+@media (max-width: 760px) {
+  .menu-btn { display: inline-block; }
+  .nav-links {
+    display: none; position: absolute; top: 62px; left: 14px; right: 14px; flex-direction: column;
+    padding: 14px; border-radius: 22px; background: var(--glass-strong);
+    border: 1px solid var(--border); backdrop-filter: blur(20px);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { text-align: center; }
+  section { padding: 70px 0; }
+  .scroll-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Page-wide effects -->
+<div id="progress"></div>
+<div id="cursorGlow"></div>
+<div class="bg-layer">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="grid-overlay"></div>
+  <canvas id="net"></canvas>
+  <div class="noise"></div>
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<header>
+  <nav>
+    <a class="logo" href="#home">OVI<span>.</span>DEV</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;gap:8px">
+      <button class="icon-btn music-btn" id="musicBtn" aria-label="Toggle background music" aria-pressed="false" title="Play music"><span class="eq"><i></i><i></i><i></i></span></button>
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle dark or light mode">🌓</button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="badge"><i></i> EEE · CUET · OPEN TO OPPORTUNITIES</span>
+        <h1>Hi, I'm <span class="grad-text">Ovi</span>.<br>I turn ideas into<br><span class="grad-text">engineering.</span></h1>
+        <div class="typing"><span id="typed"></span><span class="caret"></span></div>
+        <p class="sub">
+          Electrical and Electronic Engineering student at Chittagong University of Engineering
+          and Technology, working across power systems, electronics, intelligent systems and software.
+        </p>
+        <div class="btn-row">
+          <a class="btn primary" href="#projects">View Projects →</a>
+          <!-- TODO: put your CV PDF next to this file and name it cv.pdf -->
+          <a class="btn" href="cv.pdf" download>Download CV</a>
+          <a class="btn" href="#contact">Contact Me</a>
+        </div>
+        <div class="socials">
+          <!-- TODO: replace with your real links -->
+          <a href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/your-id" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="mailto:your.email@example.com">Email</a>
+        </div>
+      </div>
+
+      <!-- Animated oscilloscope: a square wave built from harmonics (Fourier series) -->
+      <div class="scope-wrap">
+        <div class="scope">
+          <div class="scope-bar"><i></i><i></i><i></i><span>SCOPE · CH1</span></div>
+          <canvas id="scope"></canvas>
+          <div class="scope-foot"><span id="harm">harmonics: 1</span><span>f = 50 Hz</span><span>Fourier synthesis</span></div>
+        </div>
+        <div class="chip c1">⚡ Power Systems</div>
+        <div class="chip c2">🧠 Machine Learning</div>
+        <div class="chip c3">🔌 Embedded &amp; IoT</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<!-- TODO: edit these numbers so they stay 100% true -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat glass reveal"><b class="grad-text" data-count="6">0</b><span>Featured projects</span></div>
+      <div class="stat glass reveal d1"><b class="grad-text" data-count="2">0</b><span>Industrial exposures</span></div>
+      <div class="stat glass reveal d2"><b class="grad-text" data-count="105" data-suffix=" MW">0</b><span>Power plant attachment</span></div>
+      <div class="stat glass reveal d3"><b class="grad-text" data-count="5" data-suffix="+">0</b><span>Technical domains</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="container">
+    <div class="eyebrow reveal">01 / ABOUT</div>
+    <h2 class="title reveal">About <span class="grad-text">me</span></h2>
+    <div class="about-grid">
+      <div class="glass about-text reveal">
+        <!-- TODO: rewrite in your own voice -->
+        <p>
+          I'm an Electrical and Electronic Engineering student at CUET. I like understanding
+          <b>why</b> a circuit or system behaves the way it does, and then turning that understanding
+          into something that works: a simulation, a prototype or a piece of software.
+        </p>
+        <p>
+          My interests sit where electrical engineering meets computing: smart grids and renewable
+          energy, embedded systems and AI. Outside class I help organize events with the
+          <b>IEEE CUET Student Branch</b>.
+        </p>
+        <p>
+          <b>Looking for:</b> internships, research collaboration and hands-on engineering experience.
+        </p>
+      </div>
+      <ul class="glass facts reveal d1">
+        <li><b>University</b>Chittagong University of Engineering and Technology (CUET)</li>
+        <li><b>Department</b>Electrical and Electronic Engineering</li>
+        <li><b>Expected graduation</b>TODO: add year</li>
+        <li><b>Student organization</b>IEEE CUET Student Branch</li>
+        <li><b>Location</b>Chattogram, Bangladesh</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects">
+  <div class="container">
+    <div class="eyebrow reveal">02 / PROJECTS</div>
+    <h2 class="title reveal">Selected <span class="grad-text">projects</span></h2>
+    <p class="lead reveal">
+      Delete any card you don't want. Set each status honestly (Completed / In Progress).
+      Filters use the <code>data-cat</code> attribute on each card.
+    </p>
+
+    <div class="filters reveal">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="power">Power &amp; Energy</button>
+      <button class="filter" data-filter="embedded">Embedded &amp; IoT</button>
+      <button class="filter" data-filter="ai">AI &amp; Software</button>
+    </div>
+
+    <div class="grid" id="projectGrid">
+
+      <!-- PROJECT 1 : delete this whole <article> to remove it -->
+      <article class="glass card reveal" data-cat="ai">
+        <div class="top"><span class="num">01</span><span class="status">TODO: STATUS</span></div>
+        <h3>Baagh Chal AI</h3>
+        <div class="meta">AI · Game search · Research paper</div>
+        <p>An AI player for the traditional board game Baagh Chal, developed together with a research paper.</p>
+        <ul>
+          <li>My role: TODO (algorithm, experiments, writing…)</li>
+          <li>Tools: TODO</li>
+          <li>Result: TODO (real results only)</li>
+        </ul>
+        <div class="links"><a href="#">Paper</a><a href="#">Code</a></div>
+      </article>
+
+      <!-- PROJECT 2 -->
+      <article class="glass card reveal d1" data-cat="power ai">
+        <div class="top"><span class="num">02</span><span class="status">TODO: STATUS</span></div>
+        <h3>GridGuard: Smart Grid Monitoring</h3>
+        <div class="meta">Power systems · IoT · Web dashboard</div>
+        <p>A monitoring concept for an electrical distribution grid with live data, AI-based fault prediction, charts, a Chattogram grid map, email/SMS alerts and administrator login.</p>
+        <ul>
+          <li>My role: TODO</li>
+          <li>Tools: Firebase, HTML/JavaScript, charts</li>
+          <li>Result: TODO</li>
+        </ul>
+        <div class="links"><a href="#">Report</a><a href="#">Live demo</a></div>
+      </article>
+
+      <!-- PROJECT 3 -->
+      <article class="glass card reveal d2" data-cat="power">
+        <div class="top"><span class="num">03</span><span class="status">TODO: STATUS</span></div>
+        <h3>Virtual Power Plant &amp; Community Energy</h3>
+        <div class="meta">Smart grid · VPP · Solar forecasting</div>
+        <p>Smart-grid work on a virtual power plant and community energy token idea, with solar forecasting for the Chittagong context.</p>
+        <ul>
+          <li>My role: TODO</li>
+          <li>Tools: TODO</li>
+          <li>Result: TODO</li>
+        </ul>
+        <div class="links"><a href="#">Details</a></div>
+      </article>
+
+      <!-- PROJECT 4 -->
+      <article class="glass card reveal" data-cat="embedded power">
+        <div class="top"><span class="num">04</span><span class="status">TODO: STATUS</span></div>
+        <h3>Solar Panel I–V Curve Tracer</h3>
+        <div class="meta">Embedded · Renewable energy · IoT</div>
+        <p>A MOSFET-based variable load with voltage and current sensors and an ESP32, logging data to the cloud to plot the I–V and P–V curves of solar panels.</p>
+        <ul>
+          <li>My role: TODO</li>
+          <li>Result: TODO (real measurements)</li>
+        </ul>
+        <div class="links"><a href="#">Schematic</a><a href="#">Code</a></div>
+      </article>
+
+      <!-- PROJECT 5 -->
+      <article class="glass card reveal d1" data-cat="ai">
+        <div class="top"><span class="num">05</span><span class="status">TODO: STATUS</span></div>
+        <h3>Diabetes Prediction Web App</h3>
+        <div class="meta">Python · Machine learning · Streamlit</div>
+        <p>A Streamlit app comparing XGBoost, Random Forest and Gradient Boosting, with 10-fold cross-validation, SMOTE for class imbalance and SHAP explanations.</p>
+        <ul>
+          <li>My role: TODO</li>
+          <li>Result: TODO (real metrics only)</li>
+          <li>Limitations: TODO</li>
+        </ul>
+        <div class="links"><a href="#">Live app</a><a href="#">Code</a></div>
+      </article>
+
+      <!-- PROJECT 6 -->
+      <article class="glass card reveal d2" data-cat="power">
+        <div class="top"><span class="num">06</span><span class="status">TODO: STATUS</span></div>
+        <h3>80 kVA Distribution Transformer Design</h3>
+        <div class="meta">Electrical machines · MATLAB</div>
+        <p>MATLAB design of an 80 kVA, 11 kV/433 V, three-phase, 50 Hz delta/star transformer: core and window sizing, LV/HV windings, loss estimation and percentage impedance.</p>
+        <ul>
+          <li>My role: TODO</li>
+          <li>Tools: MATLAB</li>
+        </ul>
+        <div class="links"><a href="#">Report</a><a href="#">Code</a></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills">
+  <div class="container">
+    <div class="eyebrow reveal">03 / SKILLS</div>
+    <h2 class="title reveal">Technical <span class="grad-text">skills</span></h2>
+    <p class="lead reveal">Keep only what you can discuss or demonstrate. Remove the rest.</p>
+    <div class="skills-grid">
+      <div class="glass skill-box reveal">
+        <h3><em>💻</em>Programming</h3>
+        <div class="tags"><span class="tag">Python</span><span class="tag">MATLAB</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
+      </div>
+      <div class="glass skill-box reveal d1">
+        <h3><em>⚡</em>Electrical &amp; Electronics</h3>
+        <div class="tags"><span class="tag">Circuit analysis</span><span class="tag">Op-amp circuits</span><span class="tag">Transformers</span><span class="tag">Control systems</span><span class="tag">Signals &amp; systems</span></div>
+      </div>
+      <div class="glass skill-box reveal d2">
+        <h3><em>🔌</em>Embedded &amp; IoT</h3>
+        <div class="tags"><span class="tag">ESP32</span><span class="tag">Sensors</span><span class="tag">Firebase</span></div>
+      </div>
+      <div class="glass skill-box reveal">
+        <h3><em>📊</em>Data &amp; ML</h3>
+        <div class="tags"><span class="tag">scikit-learn</span><span class="tag">XGBoost</span><span class="tag">SHAP</span><span class="tag">Matplotlib</span></div>
+      </div>
+      <div class="glass skill-box reveal d1">
+        <h3><em>📝</em>Documentation</h3>
+        <div class="tags"><span class="tag">LaTeX</span><span class="tag">Typst</span><span class="tag">IEEE format</span><span class="tag">OriginPro</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience">
+  <div class="container">
+    <div class="eyebrow reveal">04 / EXPERIENCE</div>
+    <h2 class="title reveal">Industrial &amp; practical <span class="grad-text">experience</span></h2>
+    <p class="lead reveal">Describe what you personally observed and learned.</p>
+    <div class="timeline">
+      <div class="glass t-item reveal">
+        <div class="when">TODO: dates</div>
+        <h3>Industrial Attachment · Baraka Shikalbaha Power Limited (BSPL)</h3>
+        <p>Attachment at a 105 MW heavy-fuel-oil-based independent power plant, connecting classroom knowledge with real power-plant operation. TODO: add 2–3 specific things you learned.</p>
+      </div>
+      <div class="glass t-item reveal d1">
+        <div class="when">TODO: date</div>
+        <h3>Industrial Tour · Transcom Beverages Limited, Chattogram</h3>
+        <p>Visit organized by CUET Career Club, observing a bottling production line and its automation. TODO: add what you noticed technically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEADERSHIP ===================== -->
+<section id="leadership">
+  <div class="container">
+    <div class="eyebrow reveal">05 / LEADERSHIP</div>
+    <h2 class="title reveal">Leadership &amp; <span class="grad-text">activities</span></h2>
+    <p class="lead reveal">Add your exact role and the outcomes, not just the names.</p>
+    <div class="timeline">
+      <div class="glass t-item reveal">
+        <div class="when">2026</div>
+        <h3>IEEE CUET Student Branch · TODO your position</h3>
+        <p>Involved in organizing events such as IEEE Club Fest 2026 and the CUET IEEE Day 2026 Article Writing Contest, including promotional content and communication.</p>
+      </div>
+      <div class="glass t-item reveal d1">
+        <div class="when">2026</div>
+        <h3>SciBlitz 2.0 · Three-Minute Thesis (3MT)</h3>
+        <p>TODO: your role (participant, organizer, promotion…) and the outcome.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="container">
+    <div class="glass contact-box reveal">
+      <div class="eyebrow">06 / CONTACT</div>
+      <h2>Let's build something <span class="grad-text">meaningful.</span></h2>
+      <p class="lead">Open to internships, collaborations and research opportunities. Use a professional email you are comfortable sharing publicly.</p>
+      <div class="btn-row">
+        <!-- TODO: replace with your real links -->
+        <a class="btn primary" href="mailto:your.email@example.com">Send an Email</a>
+        <a class="btn" href="https://www.linkedin.com/in/your-id" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="year"></span> Ovi · Electrical &amp; Electronic Engineering, CUET</footer>
+
+<script>
+/* =====================================================================
+   1) THEME TOGGLE (remembered between visits)
+   ===================================================================== */
+const root = document.documentElement;
+try { const s = localStorage.getItem("theme"); if (s) root.setAttribute("data-theme", s); } catch (e) {}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  try { localStorage.setItem("theme", next); } catch (e) {}
+  readColors();
+});
+
+/* =====================================================================
+   2) MOBILE MENU
+   ===================================================================== */
+const links = document.getElementById("navLinks");
+document.getElementById("menuBtn").addEventListener("click", () => links.classList.toggle("open"));
+links.querySelectorAll("a").forEach(a => a.addEventListener("click", () => links.classList.remove("open")));
+
+/* =====================================================================
+   3) SCROLL PROGRESS BAR + ACTIVE NAV LINK
+   ===================================================================== */
+const bar = document.getElementById("progress");
+const navAnchors = [...links.querySelectorAll("a")];
+const sections = navAnchors.map(a => document.querySelector(a.getAttribute("href")));
+addEventListener("scroll", () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + "%";
+  let current = -1;
+  sections.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * .4) current = i; });
+  navAnchors.forEach((a, i) => a.classList.toggle("active", i === current));
+}, { passive: true });
+
+/* =====================================================================
+   4) CURSOR GLOW + CARD SPOTLIGHT + 3D TILT
+   ===================================================================== */
+const glow = document.getElementById("cursorGlow");
+addEventListener("mousemove", e => { glow.style.left = e.clientX + "px"; glow.style.top = e.clientY + "px"; });
+
+document.querySelectorAll(".glass").forEach(el => {
+  el.addEventListener("mousemove", e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    el.style.setProperty("--my", (e.clientY - r.top) + "px");
+  });
+});
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mousemove", e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    card.style.transform = `perspective(800px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) translateY(-4px)`;
+  });
+  card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+});
+
+/* =====================================================================
+   5) REVEAL ON SCROLL + ANIMATED COUNTERS
+   ===================================================================== */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add("show");
+    const c = en.target.querySelector("[data-count]");
+    if (c && !c.dataset.done) { c.dataset.done = 1; countUp(c); }
+    io.unobserve(en.target);
+  });
+}, { threshold: .15 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+function countUp(el) {
+  const target = +el.dataset.count, suffix = el.dataset.suffix || "";
+  const t0 = performance.now(), dur = 1400;
+  (function tick(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+/* =====================================================================
+   6) PROJECT FILTERS
+   ===================================================================== */
+const filterBtns = document.querySelectorAll(".filter");
+filterBtns.forEach(btn => btn.addEventListener("click", () => {
+  filterBtns.forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const f = btn.dataset.filter;
+  document.querySelectorAll("#projectGrid .card").forEach(card => {
+    const cats = card.dataset.cat.split(" ");
+    card.classList.toggle("hide", f !== "all" && !cats.includes(f));
+  });
+}));
+
+/* =====================================================================
+   7) TYPING EFFECT
+   ===================================================================== */
+const roles = ["EEE student at CUET", "Power systems & smart grids", "Electronics & embedded systems", "Machine learning & software"];
+const typed = document.getElementById("typed");
+let ri = 0, ci = 0, del = false;
+(function type() {
+  const word = roles[ri];
+  typed.textContent = word.slice(0, ci);
+  if (!del && ci < word.length) { ci++; setTimeout(type, 70); }
+  else if (!del) { del = true; setTimeout(type, 1500); }
+  else if (ci > 0) { ci--; setTimeout(type, 35); }
+  else { del = false; ri = (ri + 1) % roles.length; setTimeout(type, 300); }
+})();
+
+/* =====================================================================
+   8) THEME COLORS FOR CANVAS
+   ===================================================================== */
+let colA = "#22d3ee", colB = "#8b5cf6";
+function readColors() {
+  const cs = getComputedStyle(root);
+  colA = cs.getPropertyValue("--a1").trim() || colA;
+  colB = cs.getPropertyValue("--a2").trim() || colB;
+}
+readColors();
+
+/* =====================================================================
+   9) BACKGROUND: glowing circuit / network particles that follow the mouse
+   ===================================================================== */
+const net = document.getElementById("net"), nctx = net.getContext("2d");
+let W, H, pts = [], mouse = { x: -999, y: -999 };
+function sizeNet() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = net.width = innerWidth * dpr; H = net.height = innerHeight * dpr;
+  net.style.width = innerWidth + "px"; net.style.height = innerHeight + "px";
+  const count = Math.min(Math.floor(innerWidth * innerHeight / 17000), 90);
+  pts = Array.from({ length: count }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - .5) * .35 * dpr, vy: (Math.random() - .5) * .35 * dpr,
+    r: (Math.random() * 1.4 + .8) * dpr
+  }));
+}
+sizeNet(); addEventListener("resize", sizeNet);
+addEventListener("mousemove", e => { const d = Math.min(devicePixelRatio || 1, 2); mouse.x = e.clientX * d; mouse.y = e.clientY * d; });
+
+(function drawNet() {
+  nctx.clearRect(0, 0, W, H);
+  const dpr = Math.min(devicePixelRatio || 1, 2), maxD = 140 * dpr;
+  for (let i = 0; i < pts.length; i++) {
+    const p = pts[i];
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+    // gentle pull toward the mouse
+    const mdx = mouse.x - p.x, mdy = mouse.y - p.y, md = Math.hypot(mdx, mdy);
+    if (md < 200 * dpr) { p.x += mdx * .0025; p.y += mdy * .0025; }
+    nctx.beginPath(); nctx.arc(p.x, p.y, p.r, 0, 6.283);
+    nctx.fillStyle = colA; nctx.globalAlpha = .75; nctx.fill();
+    for (let j = i + 1; j < pts.length; j++) {
+      const q = pts[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+      if (d < maxD) {
+        nctx.globalAlpha = (1 - d / maxD) * .35;
+        nctx.strokeStyle = i % 2 ? colA : colB; nctx.lineWidth = dpr * .8;
+        nctx.beginPath(); nctx.moveTo(p.x, p.y); nctx.lineTo(q.x, q.y); nctx.stroke();
+      }
+    }
+    if (md < 170 * dpr) {
+      nctx.globalAlpha = (1 - md / (170 * dpr)) * .6; nctx.strokeStyle = colB;
+      nctx.beginPath(); nctx.moveTo(p.x, p.y); nctx.lineTo(mouse.x, mouse.y); nctx.stroke();
+    }
+  }
+  nctx.globalAlpha = 1;
+  requestAnimationFrame(drawNet);
+})();
+
+/* =====================================================================
+   10) HERO OSCILLOSCOPE: square wave from Fourier harmonics
+   ===================================================================== */
+const sc = document.getElementById("scope"), sctx = sc.getContext("2d");
+const harmLabel = document.getElementById("harm");
+let sw, sh, phase = 0, harmonics = 1, frame = 0;
+function sizeScope() {
+  const dpr = Math.min(devicePixelRatio || 1, 2), r = sc.getBoundingClientRect();
+  sw = sc.width = r.width * dpr; sh = sc.height = r.height * dpr;
+}
+sizeScope(); addEventListener("resize", sizeScope);
+
+(function drawScope() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  sctx.clearRect(0, 0, sw, sh);
+  // graticule
+  sctx.strokeStyle = "rgba(34,211,238,.12)"; sctx.lineWidth = 1;
+  for (let i = 1; i < 10; i++) { sctx.beginPath(); sctx.moveTo(sw * i / 10, 0); sctx.lineTo(sw * i / 10, sh); sctx.stroke(); }
+  for (let j = 1; j < 6; j++) { sctx.beginPath(); sctx.moveTo(0, sh * j / 6); sctx.lineTo(sw, sh * j / 6); sctx.stroke(); }
+  sctx.strokeStyle = "rgba(34,211,238,.28)";
+  sctx.beginPath(); sctx.moveTo(0, sh / 2); sctx.lineTo(sw, sh / 2); sctx.stroke();
+
+  // slowly add harmonics 1 → 9, then restart
+  frame++;
+  if (frame % 140 === 0) harmonics = harmonics >= 9 ? 1 : harmonics + 2;
+  harmLabel.textContent = "harmonics: " + harmonics;
+
+  const grad = sctx.createLinearGradient(0, 0, sw, 0);
+  grad.addColorStop(0, colA); grad.addColorStop(1, "#f472b6");
+  sctx.strokeStyle = grad; sctx.lineWidth = 2.6 * dpr;
+  sctx.shadowColor = colA; sctx.shadowBlur = 14 * dpr;
+  sctx.beginPath();
+  for (let x = 0; x <= sw; x += 2) {
+    const t = (x / sw) * Math.PI * 4 + phase;
+    let y = 0;
+    for (let k = 1; k <= harmonics; k += 2) y += Math.sin(k * t) / k;
+    y *= 4 / Math.PI;
+    const py = sh / 2 - y * sh * .26;
+    x === 0 ? sctx.moveTo(x, py) : sctx.lineTo(x, py);
+  }
+  sctx.stroke();
+  sctx.shadowBlur = 0;
+  phase += .035;
+  requestAnimationFrame(drawScope);
+})();
+
+/* =====================================================================
+   11) BACKGROUND MUSIC (starts only when the visitor clicks the button,
+       because browsers block sound that plays automatically)
+
+   Option A (default): a soft ambient pad generated live with the Web Audio
+                       API. No file needed, no copyright problem.
+   Option B: put your own audio file next to this page and set
+                       MUSIC_FILE = "music.mp3"   (use music you have the right to use)
+   ===================================================================== */
+const MUSIC_FILE = "";
+
+const musicBtn = document.getElementById("musicBtn");
+let musicOn = false, actx = null, master = null, padBus = null, pluckTimer = null, fileAudio = null;
+
+function buildAmbient() {
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  master = actx.createGain(); master.gain.value = 0;
+
+  // low-pass filter that slowly opens and closes (gives the "breathing" feel)
+  padBus = actx.createBiquadFilter(); padBus.type = "lowpass"; padBus.frequency.value = 900; padBus.Q.value = 0.7;
+  const lfo = actx.createOscillator(); lfo.frequency.value = 0.08;
+  const lfoDepth = actx.createGain(); lfoDepth.gain.value = 500;
+  lfo.connect(lfoDepth); lfoDepth.connect(padBus.frequency); lfo.start();
+
+  // echo
+  const delay = actx.createDelay(); delay.delayTime.value = 0.45;
+  const fb = actx.createGain(); fb.gain.value = 0.4;
+  delay.connect(fb); fb.connect(delay);
+
+  padBus.connect(master); padBus.connect(delay); delay.connect(master);
+  master.connect(actx.destination);
+
+  // slow chord: A minor (A2 E3 A3 C4 E4), each note doubled and slightly detuned
+  [110, 164.81, 220, 261.63, 329.63].forEach((f, i) => {
+    [-4, 4].forEach(detune => {
+      const o = actx.createOscillator();
+      o.type = i % 2 ? "sine" : "triangle";
+      o.frequency.value = f; o.detune.value = detune;
+      const g = actx.createGain(); g.gain.value = 0.05;
+      o.connect(g); g.connect(padBus); o.start();
+    });
+  });
+}
+
+// a soft random bell note from the A minor pentatonic scale
+function pluck() {
+  const notes = [440, 523.25, 587.33, 659.25, 783.99, 880];
+  const f = notes[Math.floor(Math.random() * notes.length)];
+  const t = actx.currentTime;
+  const o = actx.createOscillator(); o.type = "sine"; o.frequency.value = f;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.09, t + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
+  o.connect(g); g.connect(padBus);
+  o.start(t); o.stop(t + 2.6);
+}
+
+function musicStart() {
+  if (MUSIC_FILE) {
+    fileAudio = fileAudio || Object.assign(new Audio(MUSIC_FILE), { loop: true, volume: 0.35 });
+    fileAudio.play().catch(() => {});
+    return;
+  }
+  if (!actx) buildAmbient();
+  if (actx.state === "suspended") actx.resume();
+  master.gain.cancelScheduledValues(actx.currentTime);
+  master.gain.linearRampToValueAtTime(0.5, actx.currentTime + 2.5);   // fade in
+  pluckTimer = setInterval(pluck, 2600);
+}
+function musicStop() {
+  if (MUSIC_FILE) { if (fileAudio) fileAudio.pause(); return; }
+  clearInterval(pluckTimer);
+  master.gain.cancelScheduledValues(actx.currentTime);
+  master.gain.linearRampToValueAtTime(0, actx.currentTime + 1);       // fade out
+  setTimeout(() => { if (!musicOn && actx) actx.suspend(); }, 1200);
+}
+
+musicBtn.addEventListener("click", () => {
+  musicOn = !musicOn;
+  musicOn ? musicStart() : musicStop();
+  musicBtn.classList.toggle("playing", musicOn);
+  musicBtn.setAttribute("aria-pressed", musicOn);
+  musicBtn.title = musicOn ? "Pause music" : "Play music";
+});
+
+/* Footer year */
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
